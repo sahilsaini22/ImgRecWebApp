@@ -41,13 +41,7 @@ def predict(request):
             f = request.FILES['file']
             file_name = "pic.jpeg"
             file_name_2 = default_storage.save(file_name, f)
-            # file_url = default_storage.url(file_name_2)
-            # original = load_img(file_url, target_size=(224, 224))
-            # numpy_image = img_to_array(original)
 
-            # imaged = form.cleaned_data.get("file").read()
-            # imagedata = np.frombuffer(imaged, dtype=np.uint8)
-            # imagedata = base64.b64encode(imaged.read())
             model = keras.models.load_model(
                 'predict/Fruit_Rec.pickle')
             test_image = keras.preprocessing.image.load_img(
@@ -72,6 +66,8 @@ def predict(request):
                 prediction = 'strawberry'
             print(prediction)
             context['name'] = prediction
+
+            default_storage.delete(file_name_2)
 
         else:
             messages.error(request, 'Incorrect file format')
